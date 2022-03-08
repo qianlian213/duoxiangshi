@@ -1,0 +1,171 @@
+import numpy as np
+import math
+
+def f_zhen(x, y, w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13, w0_14, w0_15,
+           w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26, w0_27):
+    z = w0_0 + w0_1 * x + w0_2 * y + w0_3 * x ** 2 + w0_4 * x * y + w0_5 * y ** 2 + w0_6 * x ** 3 + \
+        w0_7 * y * x ** 2 + w0_8 * x * y ** 2 + w0_9 * y ** 3 + w0_10 * x ** 4 + w0_11 * x ** 3 * y + w0_12 * x ** 2 * y ** 2 + \
+        w0_13 * x * y ** 3 + (w0_14) * y ** 4 + w0_15 * x ** 5 + w0_16 * x ** 4 * y + w0_17 * x ** 3 * y ** 2 + \
+        w0_18 * x ** 2 * y ** 3 + w0_19 * x * y ** 4 + w0_20 * y ** 5 + w0_21 * x ** 6 + w0_22 * x ** 5 * y + \
+        w0_23 * x ** 4 * y ** 2 + w0_24 * x ** 3 * y ** 3 + w0_25 * x ** 2 * y ** 4 + w0_26 * x * y ** 5 + \
+        w0_27 * y ** 6
+    return z
+
+
+def f_fu(x, y, w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13, w1_14):
+    z = w1_0 + w1_1 * x + w1_2 * y + w1_3 * x ** 2 + w1_4 * x * y + w1_5 * y ** 2 + w1_6 * x ** 3 + \
+        w1_7 * y * x ** 2 + w1_8 * x * y ** 2 + w1_9 * y ** 3 + w1_10 * x ** 4 + w1_11 * x ** 3 * y + w1_12 * x ** 2 * y ** 2 + \
+        w1_13 * x * y ** 3 + w1_14 * y ** 4
+    return z
+
+
+# 计算体积划分
+def V(w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13, w0_14, w0_15, w0_16,
+      w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26, w0_27,
+      w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13, w1_14):
+    Z_v = np.zeros([40, 40])
+    x_v = np.linspace(-19.5, 19.5, num=40, endpoint=True)
+    y_v = np.linspace(-19.5, 19.5, num=40, endpoint=True)
+    X_v, Y_v = np.meshgrid(x_v, y_v)
+    for i in range(40):
+        for j in range(40):
+            if f_zhen(X_v[i][j], Y_v[i][j], w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10,
+                      w0_11, w0_12, w0_13, w0_14, w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24,
+                      w0_25, w0_26, w0_27) - \
+                    f_fu(X_v[i][j], Y_v[i][j], w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11,
+                         w1_12, w1_13, w1_14) > 0.0:
+                Z_v[i][j] = f_zhen(X_v[i][j], Y_v[i][j], w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9,
+                                   w0_10, w0_11, w0_12, w0_13, w0_14,
+                                   w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26,
+                                   w0_27) - \
+                            f_fu(X_v[i][j], Y_v[i][j], w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9,
+                                 w1_10, w1_11, w1_12, w1_13, w1_14)
+            else:
+                Z_v[i][j] = 0
+    return np.sum(Z_v)
+
+
+# 计算零件穿出去的体积
+def V_fu(w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13, w0_14, w0_15, w0_16,
+      w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26, w0_27,
+      w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13, w1_14):
+    Z_v = np.zeros([40, 40])
+    x_v = np.linspace(-19.5, 19.5, num=40, endpoint=True)
+    y_v = np.linspace(-19.5, 19.5, num=40, endpoint=True)
+    X_v, Y_v = np.meshgrid(x_v, y_v)
+    for i in range(40):
+        for j in range(40):
+            if f_zhen(X_v[i][j], Y_v[i][j], w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10,
+                      w0_11, w0_12, w0_13, w0_14, w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24,
+                      w0_25, w0_26, w0_27) - fl_zhen(X_v[i][j], Y_v[i][j]) < 0.0:
+                Z_v[i][j] = fl_zhen(X_v[i][j], Y_v[i][j])-f_zhen(X_v[i][j], Y_v[i][j], w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10,
+                      w0_11, w0_12, w0_13, w0_14, w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24,
+                      w0_25, w0_26, w0_27)
+            if f_fu(i, j, w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13,
+                    w1_14) > fl_fu(i, j):
+                Z_v[i][j] = f_fu(i, j, w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13,
+                    w1_14)-fl_fu(i, j)
+            else:
+                Z_v[i][j] = 0
+    return np.sum(Z_v)
+
+# 零件函数
+def fl_zhen(x, y):
+    if x**2 + y**2 <= (8.5/2)**2:
+        z = 19
+    elif -9.5/2 <= y <= 9.5/2 and -3.1<= x <= 3.1 and x**2 + y**2 > (8.5/2)**2:
+        z = 6.1
+    elif 8.5/2 <= x <= 8.5/2 + 6 and -4.5 <= y <= 4.5:
+        z = 11.7
+    elif 8.5 / 2 <= x <= 8.5 / 2 + 6 and -8 <= y <= 8:
+        z = 6.1
+    elif  -8.5/2-6.2 <= x <= -8.5/2 and -3.9 <= y <= 3.9:
+        z = 10.2
+    elif  -8.5/2-6 <= x <= -8.5/2 and -8 <= y <= 8:
+        z = 6.1
+    elif 1<= y <= 7 and -1.5 <= x <= 1.5:
+        z = -1.5
+    elif -0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= -0.5*x+3/4* np.math.sqrt(3)  and 0.5 * np.math.sqrt(3) <= x <= 3.5 * np.math.sqrt(3):
+        z = -1.5
+    elif 0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= 0.5*x+3/4* np.math.sqrt(3)  and -3.5 * np.math.sqrt(3) <= x <= -0.5 * np.math.sqrt(3):
+        z = -1.5
+    else:
+        z=-float('inf')
+    return z
+
+
+def fl_fu(x, y):
+    if 1<= y <= 7 and -1.5 <= x <= 1.5:
+        z = -4.5
+    elif -0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= -0.5*x+3/4* np.math.sqrt(3)  and 0.5 * np.math.sqrt(3) <= x <= 3.5 * np.math.sqrt(3):
+        z = -4.5
+    elif 0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= 0.5*x+3/4* np.math.sqrt(3)  and -3.5 * np.math.sqrt(3) <= x <= -0.5 * np.math.sqrt(3):
+        z = -4.5
+    elif -8.5/2-6 <= x <= 8.5 / 2 + 6 and -8 <= y <= 8:
+        z = 0
+    else:
+        z = float('inf')
+    return z
+# 零件函数0
+def fl_zhen_0(x, y):
+    if -8.5/2-6 <= x <= 8.5 / 2 + 6 and -8 <= y <= 8:
+        z = 0
+    else:
+        z=float('inf')
+    return z
+
+
+def fl_fu_0(x, y):
+    if 1<= y <= 7 and -1.5 <= x <= 1.5:
+        z = -1.5
+    elif -0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= -0.5*x+3/4* np.math.sqrt(3)  and 0.5 * np.math.sqrt(3) <= x <= 3.5 * np.math.sqrt(3):
+        z = -1.5
+    elif 0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= 0.5*x+3/4* np.math.sqrt(3)  and -3.5 * np.math.sqrt(3) <= x <= -0.5 * np.math.sqrt(3):
+        z = -1.5
+    else:
+        z = -float('inf')
+    return z
+
+#整合零件函数
+
+
+
+
+# 零件适应度因子
+def fl_fitness(w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13,
+               w0_14, w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26, w0_27,
+               w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13, w1_14):
+    x = np.linspace(-12, 12, num=25,endpoint=True)
+    y = np.linspace(-12, 12, num=25,endpoint=True)
+    # X,Y = np.meshgrid(x,y)
+    for i in x:
+        for j in y:
+            if f_zhen(i, j, w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13,
+                      w0_14, w0_15, w0_16, w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26,
+                      w0_27) < fl_zhen(i, j) or  f_fu(i, j, w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13,
+                    w1_14) > fl_fu(i, j):
+                return 0
+    else:
+        return 1
+
+def get_fitness(POP_SIZE, w0_0, w0_1, w0_2, w0_3, w0_4, w0_5, w0_6, w0_7, w0_8, w0_9, w0_10, w0_11, w0_12, w0_13, w0_14,
+                w0_15, w0_16,
+                w0_17, w0_18, w0_19, w0_20, w0_21, w0_22, w0_23, w0_24, w0_25, w0_26, w0_27,
+                w1_0, w1_1, w1_2, w1_3, w1_4, w1_5, w1_6, w1_7, w1_8, w1_9, w1_10, w1_11, w1_12, w1_13, w1_14):
+    fit = np.zeros([POP_SIZE, 1])
+    fl_fit = np.zeros([POP_SIZE, 1])
+    for i in range(POP_SIZE):
+        fit[i] = 9322 / (V(w0_0[i], w0_1[i], w0_2[i], w0_3[i], w0_4[i], w0_5[i], w0_6[i], w0_7[i], w0_8[i], w0_9[i],
+                           w0_10[i], w0_11[i], w0_12[i], w0_13[i],
+                           w0_14[i], w0_15[i], w0_16[i], w0_17[i], w0_18[i], w0_19[i], w0_20[i], w0_21[i], w0_22[i],
+                           w0_23[i], w0_24[i], w0_25[i], w0_26[i], w0_27[i],
+                           w1_0[i], w1_1[i], w1_2[i], w1_3[i], w1_4[i], w1_5[i], w1_6[i], w1_7[i], w1_8[i], w1_9[i],
+                           w1_10[i], w1_11[i], w1_12[i], w1_13[i], w1_14[i]) + 1)
+        fl_fit[i]=fl_fitness(w0_0[i], w0_1[i], w0_2[i], w0_3[i], w0_4[i], w0_5[i], w0_6[i], w0_7[i], w0_8[i], w0_9[i],
+                           w0_10[i], w0_11[i], w0_12[i], w0_13[i],
+                           w0_14[i], w0_15[i], w0_16[i], w0_17[i], w0_18[i], w0_19[i], w0_20[i], w0_21[i], w0_22[i],
+                           w0_23[i], w0_24[i], w0_25[i], w0_26[i], w0_27[i],
+                           w1_0[i], w1_1[i], w1_2[i], w1_3[i], w1_4[i], w1_5[i], w1_6[i], w1_7[i], w1_8[i], w1_9[i],
+                           w1_10[i], w1_11[i], w1_12[i], w1_13[i], w1_14[i])
+
+    return fit*fl_fit
