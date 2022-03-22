@@ -1,0 +1,37 @@
+# 零件函数
+def fl_up(x, y):
+    if x**2 + y**2 <= (8.5/2)**2:
+        z = 19
+    elif -9.5/2 <= y <= 9.5/2 and -3.1<= x <= 3.1 and x**2 + y**2 > (8.5/2)**2:
+        z = 6.1
+    elif 8.5/2 <= x <= 8.5/2 + 6 and -4.5 <= y <= 4.5:
+        z = 11.7
+    elif 8.5 / 2 <= x <= 8.5 / 2 + 6 and -8 <= y <= 8:
+        z = 6.1
+    elif  -8.5/2-6.2 <= x <= -8.5/2 and -3.9 <= y <= 3.9:
+        z = 10.2
+    elif  -8.5/2-6 <= x <= -8.5/2 and -8 <= y <= 8:
+        z = 6.1
+    elif 1<= y <= 7 and -1.5 <= x <= 1.5:
+        z = -1.5
+    elif -0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= -0.5*x+3/4* np.math.sqrt(3)  and 0.5 * np.math.sqrt(3) <= x <= 3.5 * np.math.sqrt(3):
+        z = -1.5
+    elif 0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= 0.5*x+3/4* np.math.sqrt(3)  and -3.5 * np.math.sqrt(3) <= x <= -0.5 * np.math.sqrt(3):
+        z = -1.5
+    else:
+        z=-float('inf')
+    return z
+
+
+def fl_down(x, y):
+    if 1<= y <= 7 and -1.5 <= x <= 1.5:
+        z = -4.5
+    elif -0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= -0.5*x+3/4* np.math.sqrt(3)  and 0.5 * np.math.sqrt(3) <= x <= 3.5 * np.math.sqrt(3):
+        z = -4.5
+    elif 0.5*x - 3/4 *(np.math.sqrt(3)) <= y <= 0.5*x+3/4* np.math.sqrt(3)  and -3.5 * np.math.sqrt(3) <= x <= -0.5 * np.math.sqrt(3):
+        z = -4.5
+    elif -8.5/2-6 <= x <= 8.5 / 2 + 6 and -8 <= y <= 8:
+        z = 0
+    else:
+        z = float('inf')
+    return z
